@@ -9,9 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.5",
+    "@sanity/client": "^3.4.1",
+    "better-react-spinkit": "^2.0.4",
+    "firebase": "^9.9.4",
     "next": "12.3.0",
+    "next-sanity": "^0.8.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.0.3",
+    "react-google-button": "^0.7.2",
+    "stream-chat": "^7.1.0",
+    "stream-chat-react": "^10.0.1",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "eslint": "8.23.1",
