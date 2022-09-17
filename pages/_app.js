@@ -30,6 +30,22 @@ function MyApp({ Component, pageProps }) {
         chatClient.devToken(user.uid)
         )
 
+        const sort = [0]
+
+        const filter = { type: 'messaging', members: { $in: ['waZdAAjZvNaFbB4Focyoblp78P12'] && [user.uid]}}
+        const setUp = await chatClient.queryChannels(filter, sort, {
+          watch: true
+        })
+        
+        if(setUp.length == 0) {
+            const channel = await chatClient.channel('messaging', {
+              members: [user.uid, "waZdAAjZvNaFbB4Focyoblp78P12"]
+          })
+  
+          await channel.watch()
+        }
+            
+        
         userClient.createIfNotExists(doc).then((res) => {
           console.log(`User was create, document ID  is ${res.id}`)
         })

@@ -17,12 +17,15 @@ import {
     LoadingIndicator,
     ChannelList,
     SearchInput,
+    ChannelPreviewUIComponentProps
 } from 'stream-chat-react'
 
 import 'stream-chat-react/dist/css/index.css'
 import { Avatar, Button, IconButton } from '@mui/material';
 import { ChatBubbleOutline, MoreVertOutlined } from '@mui/icons-material';
 import { signOut } from 'firebase/auth';
+import Image from 'next/image';
+import PlantAvatar from '../components/PlantAvatar';
 
 
 
@@ -71,6 +74,7 @@ const ChatScreen = () => {
         <Modal 
         open={isOpen}
         onClose={() => setIsOpen(false)}
+        client={chatClient}
         >
         </Modal>
       <div
@@ -84,6 +88,35 @@ const ChatScreen = () => {
       )
     }
 
+    const CustomChannel = (ChannelPreviewUIComponentProps) => {
+        const { channel, setActiveChannel, watchers, Avatar } = ChannelPreviewUIComponentProps;
+        const array = Object.values(channel.state.members);
+        const recipient = array.filter(person => person.user.name !== user.email)[0].user.name;
+        
+        return(
+          <div style={{
+            width: '100%',
+            height: '50px',
+            backgroundColor: '#EFEFEF',
+            marginTop: '7px',
+            marginBottom: '7px',
+            borderRadius: '5px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            cursor: 'pointer',
+            height: '220px',
+            paddingTop: '20px',
+          }}
+          onClick={() => setActiveChannel(channel, watchers)}
+          >
+            <PlantAvatar />
+            <p>{recipient}</p>
+            </div>
+        )
+    }
+
     if(!client) return <Loading />
 
     return(
@@ -91,7 +124,8 @@ const ChatScreen = () => {
             <Chat client={client} theme="messaging light">
                 <ChannelList 
                 filters={filters} List={CustomList}
-                showChannelSearch additionalChannelSearchProps={{ searchForChannels: true }} 
+                showChannelSearch additionalChannelSearchProps={{ searchForChannels: true }}
+                Preview={CustomChannel}
                 />
                 <Channel>
                     <Window>
@@ -112,7 +146,7 @@ const Header = styled.div`
   display: flex;
   position: sticky;
   top: 0;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 5px;
   margin-left: 10px;
   margin-right: 10px;
@@ -134,4 +168,6 @@ const UserAvatar = styled(Avatar)`
 `;
 
 const IconsContainer = styled.div``;
+
+
 

@@ -30,7 +30,7 @@ const OVERLAY_STYLES = {
     zIndex: 1000
 }
 
-const Modal = ({open, onClose}) => {
+const Modal = ({open, onClose, client}) => {
 
     const [ type, setType ] = useState("");
     const [ recipient, setRecipient ] = useState("");
@@ -59,15 +59,15 @@ const Modal = ({open, onClose}) => {
                 otherUser: result[0].uid
             }
 
-            await fetch('http://localhost:3000/api/createchannel', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(members)
+            const channel = client.channel('messaging', {
+                members: [members.user, members.otherUser],
+                data: {
+                    level: 5,
+                    type: type,
+                }
             })
-            .then(response => response.json())
-            .then(result => console.log(result))
+            await channel.watch();
+
         })
     }
    
@@ -90,6 +90,7 @@ const Modal = ({open, onClose}) => {
             type="text"
             placeholder="recipient email address"
             onChange={e => setRecipient(e.target.value)}
+            value={recipient}
             />
             <h3
             style={{
@@ -108,9 +109,11 @@ const Modal = ({open, onClose}) => {
                             justifyContent: "center",
                             flexDirection: "row",
                         }}
+                        value={type}
+                        onChange={e => setType(e.target.value)}
                         >
                             <PlantDiv>
-                                <img src={'/cactus-1.png'} height={135} width={135} />
+                                <img src={'/cactus/cactus-1.png'} height={135} width={135} />
                                 <PlantNameDiv>
                                     <RadioIcon value="cactus" name="type" />
                                     <p
@@ -121,7 +124,7 @@ const Modal = ({open, onClose}) => {
                                 </PlantNameDiv>
                             </PlantDiv>
                             <PlantDiv>
-                            <img src={`/alocasia-1.png`} alt="" height={135} width={135}/>
+                            <img src={`/alocasia/alocasia-1.png`} alt="" height={135} width={135}/>
                             <PlantNameDiv>
                             <RadioIcon value="alocasia" name="type" />
                             <p style={{
@@ -143,6 +146,7 @@ const Modal = ({open, onClose}) => {
                 marginTop: "20px",
             }}
             type="submit"
+            disabled={!type || !recipient}
             onClick={() => {
                 onClose()
                 createTock()
